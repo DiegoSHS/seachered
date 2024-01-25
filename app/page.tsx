@@ -5,6 +5,8 @@ import ConnectSupabaseSteps from "@/components/ConnectSupabaseSteps";
 import SignUpUserSteps from "@/components/SignUpUserSteps";
 import Header from "@/components/Header";
 import { cookies } from "next/headers";
+import { Button } from "@/components/Input";
+import Link from "next/link";
 
 export default async function Index() {
   const cookieStore = cookies();
@@ -28,6 +30,7 @@ export default async function Index() {
         <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
           <DeployButton />
           {isSupabaseConnected && <AuthButton />}
+          <Link href={'/products'} passHref legacyBehavior><Button>Ir al ejemplo</Button></Link>
         </div>
       </nav>
 
