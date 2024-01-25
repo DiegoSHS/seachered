@@ -9,12 +9,12 @@ export default function Login({
   searchParams: { message: string };
 }) {
   const signIn = async (formData: FormData) => {
-    "use server";
+    "use server"
 
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
+    const email = formData.get("email") as string
+    const password = formData.get("password") as string
+    const cookieStore = cookies()
+    const supabase = createClient(cookieStore)
 
     const { error } = await supabase.auth.signInWithPassword({
       email,
