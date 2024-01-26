@@ -1,4 +1,5 @@
 import { SupabaseClient } from "@supabase/supabase-js"
+import { textChangeRangeIsUnchanged } from "typescript"
 /**
  * Delete a record by its id in the selected table
  * @param {SupabaseClient} supabase Supabase client
@@ -16,6 +17,15 @@ export const deleteById = async (supabase, table, id) => {
  */
 export const selectAll = async (supabase, table) => {
     return supabase.from(table).select()
+}
+/**
+ * 
+ * @param {SupabaseClient} supabase 
+ * @param {String} table 
+ * @param {String} category 
+ */
+export const selectCategory = async (supabase, table, category) => {
+    return supabase.from(table).select().eq('category', category)
 }
 /**
  * Retrieves records by text search in the selected table

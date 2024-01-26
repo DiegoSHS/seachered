@@ -1,10 +1,19 @@
 import { useState } from "react"
-import { Button, Input } from "./Input"
+import { Button, Input, Select } from "./Input"
+
+export const opts = [
+  { text: 'Bebidas', value: 'drinks', title: 'drinks' },
+  { text: 'Botanas', value: 'snacks', title: 'snacks' },
+  { text: 'Alcohol', value: 'alcohol', title: 'alcohol' },
+  { text: 'Cuidado personal', value: 'personal', title: 'personal' }
+]
+
 export default function CreateNewForm({ actionMethod, activeState }) {
   const [newProduct, setNewProduct] = useState({
     name: '',
     price: 0,
-    description: ''
+    description: '',
+    category: null
   })
   const handleChange = ({ target }) => {
     setNewProduct((product) => ({ ...product, [target.name]: target.value }))
@@ -20,7 +29,8 @@ export default function CreateNewForm({ actionMethod, activeState }) {
     setNewProduct({
       name: '',
       price: 0,
-      description: ''
+      description: '',
+      category: null
     })
     activeState(false)
   }
@@ -30,6 +40,10 @@ export default function CreateNewForm({ actionMethod, activeState }) {
       <Input type="text" placeholder="Nombre" name='name' required />
       <Input type="number" placeholder="Precio" name='price' required />
       <Input type="text" placeholder="Descripción" name='description' required />
+      <div className="flex gap-1 items-center justify-between">
+        Categoria del producto
+        <Select name="category" options={opts}></Select>
+      </div>
       <Button type='submit'>Crear</Button>
     </form>
   )

@@ -3,8 +3,9 @@
 import { createClient } from "@/utils/supabase/client"
 import { useEffect, useState } from "react"
 import { ProductCards } from '@/components/productCard'
-import { selectAll, selectFiltered } from "../supabase/transactions"
-import { Button, Input } from "@/components/Input"
+import { selectAll, selectCategory, selectFiltered } from "../supabase/transactions"
+import { Button, Input, Select } from "@/components/Input"
+import { opts } from "@/components/CreateNewForm"
 
 export default function Products() {
     const [products, setProducts] = useState([])
@@ -12,6 +13,11 @@ export default function Products() {
     const supabase = createClient()
     const handleSearch = async (e) => {
         setFilter(e.target.value)
+    }
+    const handleCategory = async ({ target }) => {
+        console.log(target.value)
+        const { data } = await selectCategory(supabase, 'products', target.value)
+        setProducts((products) => data)
     }
     const getProducts = async () => {
         const { data } = await selectAll(supabase, 'products')
@@ -36,6 +42,7 @@ export default function Products() {
             <div className="items-center justify-center">
                 <Input type='text' placeholder='buscar' onChange={handleSearch} />
                 <Button className='bg-inherit rounded-md px-4 py-2 text-foreground mb-2' onClick={getProducts}>Borrar filtros</Button>
+                <Select onChange={handleCategory} name='category' options={opts}></Select>
             </div>
             <ProductCards products={products} state={[setProducts]} supabase={supabase} />
         </div>

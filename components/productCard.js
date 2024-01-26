@@ -1,12 +1,16 @@
-import { createNew, deleteById } from "@/app/supabase/transactions";
-import { Button } from "@/components/Input";
-import CreateNewForm from "@/components/CreateNewForm";
-import { useState } from "react";
+import { createNew, deleteById } from "@/app/supabase/transactions"
+import { Button } from "@/components/Input"
+import CreateNewForm from "@/components/CreateNewForm"
+import { useState } from "react"
+
 export const ProductCard = ({ product, methods }) => {
     const [handleDelete] = methods
     return (
         <div className="p-1 text-foreground border border-t-foreground/10 rounded-md px-4 py-2 b-2">
-            <div className="font-bold">{product.name}</div>
+            <div className="flex justify-between">
+                <div className="font-bold">{product.name}</div>
+                <div className="text-xs font-bold">{product.category}</div>
+            </div>
             <div className="text-green-500">{`$${product.price}`}</div>
             <div>{product.description}</div>
             <div>
@@ -34,7 +38,9 @@ export const ProductCards = ({ products, state, supabase }) => {
                     <Button onClick={() => { setCreateActive((active) => !active) }}>Crear nuevo</Button>
                 </div>
                 <div className="text-foreground grid grid-cols-3 m-5 px-8 gap-2 justify-center items-center">
-                    {products.map((product) => <ProductCard key={product.id} product={product} methods={[handleDelete]} />)}
+                    {
+                        products.length !== 0 ? products.map((product) => <ProductCard key={product.id} product={product} methods={[handleDelete]} />) : <div>Aqui no hay nada</div>
+                    }
                 </div>
             </>)
     )
