@@ -24,7 +24,15 @@ export const selectAll = async (supabase, table) => {
  * @param {String} filter Stirng to match
  */
 export const selectFiltered = async (supabase, table, filter) => {
-    return supabase.from(table).select().textSearch('name', filter)
+    const data = await Promise.allSettled([
+        supabase.from(table).select().textSearch('name', filter),
+        supabase.from(table).select().textSearch('description', filter),
+        supabase.from(table).select().eq('price', Number(filter))
+    ]).then(results => {
+        const data = results.map(({ value }) => value.data)
+        return data.flat()
+    })
+    return { data }
 }
 /**
  * Insert a new record to the selected table

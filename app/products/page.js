@@ -10,20 +10,27 @@ export default function Products() {
     const [products, setProducts] = useState([])
     const [filter, setFilter] = useState('')
     const supabase = createClient()
+    const handleSearch = async (e) => {
+        setFilter(e.target.value)
+    }
     const getProducts = async () => {
         const { data } = await selectAll(supabase, 'products')
         console.log(data)
         setProducts(data)
     }
-    useEffect(() => {
-        getProducts()
-    }, [])
-    const handleSearch = async (e) => {
-        setFilter(e.target.value)
+    const getFilterProducts = async () => {
         console.log(filter)
+        if (filter === '') return getProducts()
         const { data } = await selectFiltered(supabase, 'products', filter)
         setProducts(data)
     }
+    useEffect(() => {
+        getProducts()
+    }, [])
+    useEffect(() => {
+        getFilterProducts()
+    }, [filter])
+
     return (
         <div className="flex flex-col mt-4 items-center">
             <div className="items-center justify-center">
