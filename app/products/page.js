@@ -17,7 +17,7 @@ export default function Products() {
     const handleCategory = async ({ target }) => {
         console.log(target.value)
         const { data } = await selectCategory(supabase, 'products', target.value)
-        setProducts((products) => data)
+        setProducts(data)
     }
     const getProducts = async () => {
         const { data } = await selectAll(supabase, 'products')

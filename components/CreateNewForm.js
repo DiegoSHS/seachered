@@ -41,7 +41,7 @@ export default function CreateNewForm({ actionMethod, activeState }) {
       <Input type="number" placeholder="Precio" name='price' required />
       <Input type="text" placeholder="Descripción" name='description' required />
       <div className="flex gap-1 items-center justify-between">
-        Categoria del producto
+        <div className="px-4">Categoria del producto</div>
         <Select name="category" options={opts}></Select>
       </div>
       <Button type='submit'>Crear</Button>

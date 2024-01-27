@@ -17,9 +17,9 @@ export const Input = ({ children, ...props }) => {
 
 export const Select = ({ options, ...props }) => {
     return (
-        <select className="px-4 py-2 bg-foreground border text-white rounded-md" {...props}>
+        <select className="px-4 py-2 bg-inherit border text-inherit rounded-md" {...props}>
             {options.map((e, i) => <option
-                className="px-4 py-2 bg-foreground border text-inherit text-white rounded-md"
+                className="px-4 py-2 bg-background border text-inherit text-inherit rounded-md"
                 key={i}
                 value={e.value || ''}
                 title={e.title || ''}
