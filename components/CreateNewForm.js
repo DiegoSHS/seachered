@@ -29,7 +29,10 @@ export default function CreateNewForm({ actionMethod, activeState }) {
     if (!validform) {
       return
     }
-    actionMethod(newProduct)
+    const res = actionMethod(newProduct)
+    if(res.error){
+      return
+    }
     setNewProduct({
       name: '',
       price: 0,

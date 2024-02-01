@@ -7,10 +7,21 @@ export const validateProduct = (product) => {
 }
 
 export const validateProductTypes = (product) => {
+    const errors = {}
+    const noEmpty = Object.values(product).every(e => e !== '')
+    if (!typeof product.name === 'string') errors.name = 'Tipo de dato invalido'
+    if (!typeof product.description === 'string') errors.description = 'Tipo de dato invalido'
+    if (!typeof product.price === 'number') errors.price = 'Tipo de dato invalido'
     const valid = (
         typeof product.name === 'string' &&
         typeof product.description === 'string' &&
-        typeof product.price === 'number'
+        typeof product.price === 'number' &&
+        noEmpty
     )
-    return valid ? product : valid
+    const error = valid ? false : {
+        errors,
+        code: 400,
+        message: 'Algunos campos no tienen el tipo de dato correcto'
+    }
+    return { error }
 }

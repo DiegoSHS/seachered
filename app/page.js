@@ -18,11 +18,9 @@ export default function Products() {
     }
     const getProducts = async () => {
         const { data } = await selectAll('products')
-        console.log(data)
         setProducts(data)
     }
     const getFilterProducts = async () => {
-        console.log(filter)
         if (filter === '') return getProducts()
         const { data } = await selectFiltered('products', filter)
         setProducts(data)

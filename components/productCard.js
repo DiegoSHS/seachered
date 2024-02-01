@@ -29,8 +29,13 @@ export const ProductCards = ({ products, state, supabase }) => {
         await deleteById('products', id)
     }
     const handleCreate = async (newProduct) => {
-        const { data } = await createNew('products', newProduct)
+        const { error, data } = await createNew('products', newProduct)
+        if (error) {
+            alert(error.message)
+            return { error }
+        }
         setProducts((products) => [...products, ...data])
+        alert('Insertado con éxito')
     }
     return (
         createActive ? (<CreateNewForm actionMethod={handleCreate} activeState={setCreateActive} />) :

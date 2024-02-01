@@ -1,5 +1,6 @@
 'use server'
 import { createClient } from "@/utils/supabase/server"
+import { validateProductTypes } from "@/validations"
 import { SupabaseClient } from "@supabase/supabase-js"
 import { cookies } from "next/headers"
 const cookieStore = cookies()
@@ -12,6 +13,10 @@ const client = createClient(cookieStore)
  * @returns 
  */
 export const deleteById = async (table, id, supabase = client) => {
+    const { count } = await supabase.from(table).select('*', { head: true, count: 'exact' })
+    if (count === 0) {
+        return { error: 'No existe el elemento' }
+    }
     return supabase.from(table).delete({ count: 'estimated' }).eq('id', id)
 }
 /**
@@ -22,6 +27,11 @@ export const deleteById = async (table, id, supabase = client) => {
 export const selectAll = async (table, supabase = client) => {
     return supabase.from(table).select()
 }
+
+export const selectById = async (table, id, supabase = client) => {
+    return supabase.from(table).select().eq('id', id)
+}
+
 /**
  * Retrieves all recors of the selected table by category
  * @param {SupabaseClient} supabase Supabase client
@@ -58,5 +68,9 @@ export const selectFiltered = async (table, filter, supabase = client) => {
  * @param {Object} newObject Object to insert
  */
 export const createNew = async (table, newObject, supabase = client) => {
+    const valid = validateProductTypes(newObject)
+    if (valid.error) {
+        return valid
+    }
     return supabase.from(table).insert(newObject).select()
 }
