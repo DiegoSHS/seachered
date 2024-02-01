@@ -1,4 +1,9 @@
+'use server'
+import { createClient } from "@/utils/supabase/server"
 import { SupabaseClient } from "@supabase/supabase-js"
+import { cookies } from "next/headers"
+const cookieStore = cookies()
+const client = createClient(cookieStore)
 /**
  * Delete a record by its id in the selected table
  * @param {SupabaseClient} supabase Supabase client
@@ -6,7 +11,7 @@ import { SupabaseClient } from "@supabase/supabase-js"
  * @param {Number} id Id of the record
  * @returns 
  */
-export const deleteById = async (supabase, table, id) => {
+export const deleteById = async (table, id, supabase = client) => {
     return supabase.from(table).delete({ count: 'estimated' }).eq('id', id)
 }
 /**
@@ -14,7 +19,7 @@ export const deleteById = async (supabase, table, id) => {
  * @param {SupabaseClient} supabase Supabase client
  * @param {String} table Name of the table
  */
-export const selectAll = async (supabase, table) => {
+export const selectAll = async (table, supabase = client) => {
     return supabase.from(table).select()
 }
 /**
@@ -23,7 +28,7 @@ export const selectAll = async (supabase, table) => {
  * @param {String} table Name of the table
  * @param {String} category Name of the category (use category column)
  */
-export const selectCategory = async (supabase, table, category) => {
+export const selectCategory = async (table, category, supabase = client) => {
     if (category === '') {
         return supabase.from(table).select().is('category', null)
     }
@@ -35,7 +40,7 @@ export const selectCategory = async (supabase, table, category) => {
  * @param {String} table Name of the table
  * @param {String} filter Stirng to match
  */
-export const selectFiltered = async (supabase, table, filter) => {
+export const selectFiltered = async (table, filter, supabase = client) => {
     const data = await Promise.allSettled([
         supabase.from(table).select().textSearch('name', filter),
         supabase.from(table).select().textSearch('description', filter),
@@ -52,6 +57,6 @@ export const selectFiltered = async (supabase, table, filter) => {
  * @param {String} table Name of the table
  * @param {Object} newObject Object to insert
  */
-export const createNew = async (supabase, table, newObject) => {
+export const createNew = async (table, newObject, supabase = client) => {
     return supabase.from(table).insert(newObject).select()
 }

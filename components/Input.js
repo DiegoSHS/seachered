@@ -1,5 +1,3 @@
-import { useState } from "react"
-
 export const Button = ({ children, disabled, ...props }) => {
     return (
         <button className={`${disabled ? 'bg-green-900' : 'bg-green-700'} rounded-md px-4 py-2 text-foreground ${disabled ? 'text-gray-400' : 'text-white'} mb-2 ${disabled ? '' : 'hover:bg-green-600'}`} {...props}>

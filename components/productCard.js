@@ -2,7 +2,8 @@ import { createNew, deleteById } from "@/supabase/transactions"
 import { Button } from "@/components/Input"
 import CreateNewForm from "@/components/CreateNewForm"
 import { useState } from "react"
-import Empty from "@/components/Empty";
+import Empty from "@/components/Empty"
+
 export const ProductCard = ({ product, methods }) => {
     const [handleDelete] = methods
     return (
@@ -25,10 +26,10 @@ export const ProductCards = ({ products, state, supabase }) => {
     const [createActive, setCreateActive] = useState(false)
     const handleDelete = async (id) => {
         setProducts((products) => products.filter((product) => product.id !== id))
-        await deleteById(supabase, 'products', id)
+        await deleteById('products', id)
     }
     const handleCreate = async (newProduct) => {
-        const { data } = await createNew(supabase, 'products', newProduct)
+        const { data } = await createNew('products', newProduct)
         setProducts((products) => [...products, ...data])
     }
     return (

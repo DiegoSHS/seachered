@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { AlertLabel, Button, Input, Select } from "./Input"
+import { validateProduct } from "@/validations"
 
 export const opts = [
   { text: 'No aplica', value: null, title: 'n/a' },
@@ -8,23 +9,6 @@ export const opts = [
   { text: 'Alcohol', value: 'alcohol', title: 'alcohol' },
   { text: 'Cuidado personal', value: 'personal', title: 'personal' }
 ]
-
-const validateProduct = (product) => {
-  const errors = {}
-  if (!(product.name.length >= 3)) errors.name = 'El nombre es muy corto'
-  if (!(product.description.length >= 5)) errors.description = 'La descripción es muy corta'
-  if (product.price === 0) errors.price = 'El precio no puede ser 0'
-  return errors
-}
-
-const validateProductTypes = (product) => {
-  const valid = (
-    typeof product.name === 'string' &&
-    typeof product.description === 'string' &&
-    typeof product.price === 'number'
-  )
-  return valid ? product : valid
-}
 
 export default function CreateNewForm({ actionMethod, activeState }) {
   const [newProduct, setNewProduct] = useState({
