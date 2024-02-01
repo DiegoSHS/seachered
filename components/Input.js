@@ -1,23 +1,23 @@
 export const Button = ({ children, disabled, ...props }) => {
     return (
-        <button className={`${disabled ? 'bg-green-900' : 'bg-green-700'} rounded-md px-4 py-2 text-foreground ${disabled ? 'text-gray-400' : 'text-white'} mb-2 ${disabled ? '' : 'hover:bg-green-600'}`} {...props}>
+        <button className={`${disabled ? 'bg-green-900' : 'bg-green-700'} rounded-md px-4 flex gap-2 py-2 text-foreground ${disabled ? 'text-gray-400' : 'text-white'} mb-2 ${disabled ? '' : 'hover:bg-green-600'}`} {...props}>
             {children}
         </button>
     )
 }
 
-export const Input = ({ children, ...props }) => {
+export const Input = ({ children, disabled, ...props }) => {
     return (
         <input
-            className="rounded-md px-4 py-2 bg-inherit text-inherit border mt-6 text-white hover:border-gray-200"
+            className={`rounded-md px-4 py-2 ${disabled ? 'bg-gray-300' : 'bg-inherit'} text-inherit border mt-6 hover:border-gray-200`}
             {...props}
         ></input>
     )
 }
 
-export const Select = ({ options, ...props }) => {
+export const Select = ({ options, disabled, ...props }) => {
     return (
-        <select className="px-4 py-2 bg-inherit border text-inherit rounded-md" {...props}>
+        <select className={`px-4 py-2 ${disabled ? 'bg-gray-300' : 'bg-inherit'} border text-inherit rounded-md`} {...props}>
             {options.map((e, i) => <option
                 className="px-4 py-2 bg-background border text-inherit text-inherit rounded-md"
                 key={i}
