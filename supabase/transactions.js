@@ -24,6 +24,9 @@ export const selectAll = async (supabase, table) => {
  * @param {String} category Name of the category (use category column)
  */
 export const selectCategory = async (supabase, table, category) => {
+    if (category === '') {
+        return supabase.from(table).select().is('category', null)
+    }
     return supabase.from(table).select().eq('category', category)
 }
 /**

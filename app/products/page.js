@@ -3,7 +3,7 @@
 import { createClient } from "@/utils/supabase/client"
 import { useEffect, useState } from "react"
 import { ProductCards } from '@/components/productCard'
-import { selectAll, selectCategory, selectFiltered } from "../supabase/transactions"
+import { selectAll, selectCategory, selectFiltered } from "../../supabase/transactions"
 import { Button, Input, Select } from "@/components/Input"
 import { opts } from "@/components/CreateNewForm"
 
@@ -15,7 +15,6 @@ export default function Products() {
         setFilter(e.target.value)
     }
     const handleCategory = async ({ target }) => {
-        console.log(target.value)
         const { data } = await selectCategory(supabase, 'products', target.value)
         setProducts(data)
     }

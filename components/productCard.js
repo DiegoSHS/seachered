@@ -1,4 +1,4 @@
-import { createNew, deleteById } from "@/app/supabase/transactions"
+import { createNew, deleteById } from "@/supabase/transactions"
 import { Button } from "@/components/Input"
 import CreateNewForm from "@/components/CreateNewForm"
 import { useState } from "react"

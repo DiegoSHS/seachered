@@ -1,6 +1,8 @@
-export const Button = ({ children, ...props }) => {
+import { useState } from "react"
+
+export const Button = ({ children, disabled, ...props }) => {
     return (
-        <button className="bg-green-700 rounded-md px-4 py-2 text-foreground text-white mb-2 hover:bg-green-600" {...props}>
+        <button className={`${disabled ? 'bg-green-900' : 'bg-green-700'} rounded-md px-4 py-2 text-foreground ${disabled ? 'text-gray-400' : 'text-white'} mb-2 ${disabled ? '' : 'hover:bg-green-600'}`} {...props}>
             {children}
         </button>
     )
@@ -9,7 +11,7 @@ export const Button = ({ children, ...props }) => {
 export const Input = ({ children, ...props }) => {
     return (
         <input
-            className="rounded-md px-4 py-2 bg-inherit text-inherit border mb-6 text-white hover:border-gray-200"
+            className="rounded-md px-4 py-2 bg-inherit text-inherit border mt-6 text-white hover:border-gray-200"
             {...props}
         ></input>
     )
@@ -27,5 +29,16 @@ export const Select = ({ options, ...props }) => {
             >{e.text}
             </option >)}
         </select >
+    )
+}
+
+
+export const AlertLabel = ({ children, ...props }) => {
+    return (
+        <label className="text-orange-500 flex items-center gap-1" {...props}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
+            </svg>{children}
+        </label>
     )
 }
