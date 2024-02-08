@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { AlertLabel, Button, Input, Select } from "./Input"
 import { validateProduct } from "@/validations"
+import { StoredContext } from "@/context"
 
 export const opts = [
   { text: 'No aplica', value: null, title: 'n/a' },
@@ -10,53 +11,40 @@ export const opts = [
   { text: 'Cuidado personal', value: 'personal', title: 'personal' }
 ]
 
-export default function CreateNewForm({ actionMethod, activeState }) {
-  const [newProduct, setNewProduct] = useState({
-    name: '',
-    price: 0,
-    description: '',
-    category: null
-  })
+const defaultProduct = {
+  name: '',
+  price: 0,
+  description: '',
+  category: null
+}
+
+export default function CreateNewForm() {
+  const [newProduct, setNewProduct] = useState(defaultProduct)
+  const { memory: { products, validForm, handlers: { handleCreate } }, setStored } = StoredContext()
   const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(false)
-  const [validform, setValidform] = useState(false)
   const handleChange = ({ target }) => {
     setNewProduct((product) => ({ ...product, [target.name]: target.name == 'price' ? Number(target.value) : target.value }))
     setErrors(validateProduct(newProduct))
-    setValidform((validForm) => Object.entries(errors).length === 0)
+    setStored({ validForm: Object.entries(errors).length === 0 })
   }
   const handleSubmit = (e) => {
     setLoading((loading) => !loading)
     e.preventDefault()
-    if (!validform) {
+    if (!validForm) {
       return
     }
-    actionMethod(newProduct, ({ error }) => {
-      console.log(error)
-      if (error) {
-        return
-      }
-      setNewProduct({
-        name: '',
-        price: 0,
-        description: '',
-        category: null
-      })
-      setLoading((loading) => !loading)
-      setValidform((valid) => !valid)
-      e.target.reset()
-    })
-
+    handleCreate()
+    alert('Insertado con éxito')
+    setNewProduct(defaultProduct)
+    setLoading((loading) => !loading)
+    setStored({ validForm: false })
+    e.target.reset()
   }
   const handleCancel = (e) => {
     e.preventDefault()
-    setNewProduct({
-      name: '',
-      price: 0,
-      description: '',
-      category: null
-    })
-    activeState(false)
+    setNewProduct(defaultProduct)
+    setStored({ activeForm: false })
   }
   return (
     <form onSubmit={handleSubmit} onChange={handleChange} className="text-foreground w-full flex flex-col gap-2 items-center justify-center mt-5">

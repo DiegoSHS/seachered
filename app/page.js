@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { ProductCards } from '@/components/productCard'
-import { selectAll, selectCategory, selectFiltered } from "@/supabase/transactions"
+import { selectCategory, selectFiltered } from "@/supabase/transactions"
 import { Button, Input, Select } from "@/components/Input"
 import { opts } from "@/components/CreateNewForm"
 
@@ -14,10 +14,6 @@ export default function Products() {
     }
     const handleCategory = async ({ target }) => {
         const { data } = await selectCategory('products', target.value)
-        setProducts(data)
-    }
-    const getProducts = async () => {
-        const { data } = await selectAll('products')
         setProducts(data)
     }
     const getFilterProducts = async () => {

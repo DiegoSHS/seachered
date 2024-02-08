@@ -1,11 +1,10 @@
-import { createNew, deleteById } from "@/supabase/transactions"
 import { Button } from "@/components/Input"
 import CreateNewForm from "@/components/CreateNewForm"
-import { useState } from "react"
+import { StoredContext } from "@/context"
 import Empty from "@/components/Empty"
 
-export const ProductCard = ({ product, methods }) => {
-    const [handleDelete] = methods
+export const ProductCard = ({ product }) => {
+    const { memory: { handlers: { handleDelete } } } = StoredContext()
     return (
         <div className="p-1 text-foreground border border-t-foreground/10 rounded-md px-4 py-2 b-2">
             <div className="flex justify-between">
@@ -21,32 +20,17 @@ export const ProductCard = ({ product, methods }) => {
     )
 }
 
-export const ProductCards = ({ products, state, supabase }) => {
-    const [setProducts] = state
-    const [createActive, setCreateActive] = useState(false)
-    const handleDelete = async (id) => {
-        setProducts((products) => products.filter((product) => product.id !== id))
-        await deleteById('products', id)
-    }
-    const handleCreate = async (newProduct, callback) => {
-        createNew('products', newProduct).then(({ error, data }) => {
-            if (error) {
-                alert(error.message)
-            }
-            setProducts((products) => [...products, ...data])
-            alert('Insertado con éxito')
-            callback({ error })
-        })
-    }
+export const ProductCards = ({ products }) => {
+    const { memory: { products }, setStored } = StoredContext()
     return (
-        createActive ? (<CreateNewForm actionMethod={handleCreate} activeState={setCreateActive} />) :
+        createActive ? (<CreateNewForm />) :
             (<>
                 <div className="text-foreground w-full flex items-center justify-center mt-5">
-                    <Button onClick={() => { setCreateActive((active) => !active) }}>Crear nuevo</Button>
+                    <Button onClick={() => { setStored({ creating: true }) }}>Crear nuevo</Button>
                 </div>{products.length !== 0 ?
                     <div className="text-foreground grid grid-cols-3 m-5 px-8 gap-2 justify-center items-center">
                         {
-                            products.map((product) => <ProductCard key={product.id} product={product} methods={[handleDelete]} />)
+                            products.map((product) => <ProductCard key={product.id} product={product} />)
                         }
                     </div> : <Empty></Empty>}
             </>)
