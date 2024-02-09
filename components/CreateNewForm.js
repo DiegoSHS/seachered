@@ -3,6 +3,7 @@ import { AlertLabel, Button, Input, Select } from "./Input"
 import { validateProduct } from "@/validations"
 import { StoredContext, defaultProduct } from "@/context"
 import { createNew, updateRecord } from "@/supabase/transactions"
+import toast from "react-hot-toast"
 
 export const opts = [
   { text: 'No aplica', value: null, title: 'n/a' },
@@ -22,40 +23,33 @@ export default function CreateNewForm() {
       validForm: Object.entries(errors).length === 0
     })
     setErrors(validateProduct(newProduct))
-    console.log(newProduct)
   }
-  const handleCreate = async (product) => {
-    const { error, data } = await createNew('products', product)
-    if (error) {
-      alert(error.message)
-      return
-    } else {
-      setStored({ products: [...products, ...data] })
-      alert('Insertado con éxito')
-    }
-  }
-  const handleUpdate = async (product, id) => {
-    const { error, data } = await updateRecord('products', product, id)
-    if (error) {
-      alert(error.message)
-      return
-    } else {
-      setStored({ products: [...products, ...data] })
-      alert('Actualizado con éxito')
-    }
-  }
-  const method = (selected) => selected ? handleUpdate(newProduct, selected) : handleCreate(newProduct)
+  const handler = async (s = selected, n = newProduct) => s ? updateRecord('products', n, s) : createNew('products', n)
   const handleSubmit = (e) => {
     e.preventDefault()
     setLoading((loading) => !loading)
     if (!validForm) {
       return
     }
-    method(selected).then(() => {
-      setStored({ newProduct: defaultProduct, validForm: false })
-      setLoading((loading) => !loading)
-      e.target.reset()
+    toast.promise(handler(), {
+      success: ({ data, error }) => {
+        if (selected) {
+          setStored({ products: [...products.filter((e) => e.id !== data[0].id), ...data], newProduct: defaultProduct, validForm: false })
+        } else {
+          setStored({ products: [...products, ...data], newProduct: defaultProduct, validForm: false })
+        }
+        setLoading((loading) => !loading)
+        e.target.reset()
+        if (error) return 'Error en el servidor'
+        return 'Guardado con éxito!'
+      },
+      error: 'Error al realizar petición, intente de nuevo',
+      loading: 'Guardando'
+    }, {
+      id: 'update-create',
+      duration: 3000
     })
+    setStored({ selected: null })
   }
   const handleCancel = (e) => {
     e.preventDefault()
@@ -74,7 +68,7 @@ export default function CreateNewForm() {
         <div className="px-4">Categoria del producto</div>
         <Select name="category" options={opts} disabled={loading} defaultValue={newProduct.category}></Select>
       </div>
-      <Button type='submit' disabled={!validForm || loading}>
+      <Button type='submit' variant='contained' disabled={!validForm || loading}>
         {loading ? <>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="animate-spin w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />

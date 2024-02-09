@@ -1,6 +1,11 @@
-export const Button = ({ children, disabled, ...props }) => {
+export const Button = ({ children, disabled, variant, ...props }) => {
+    const classNames = {
+        'outline': 'border border-white hover:opacity-80',
+        'text': 'bg-inherit text-green-500 hover:text-green-200',
+        'contained': 'text-white bg-green-700 hover:bg-green-600'
+    }
     return (
-        <button className={`${disabled ? 'bg-green-900' : 'bg-green-700'} rounded-md px-4 flex gap-2 py-2 text-foreground ${disabled ? 'text-gray-400' : 'text-white'} mb-2 ${disabled ? '' : 'hover:bg-green-600'}`} {...props}>
+        <button className={`${disabled && 'opacity-25'} ${classNames[variant || 'text']} rounded-md px-4 flex gap-2 py-2 text-foreground mb-2`} {...props}>
             {children}
         </button>
     )
