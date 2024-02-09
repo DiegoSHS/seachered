@@ -30,8 +30,8 @@ export default function Products() {
     const getProducts = async () => {
         loadProducts(selectAll('products'))
     }
-    const handleSearch = async (e) => {
-        setFilter(e.target.value)
+    const handleSearch = async ({target}) => {
+        setFilter(target.value)
     }
     const handleCategory = async ({ target }) => {
         loadProducts(selectCategory('products', target.value))

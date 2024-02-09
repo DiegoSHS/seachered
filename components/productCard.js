@@ -50,6 +50,6 @@ export const ProductCards = ({ products }) => {
                 {
                     products.map((product) => <ProductCard key={product.id} product={product} />)
                 }
-            </div> : <Empty></Empty>
+            </div> : <Empty />
     )
 }

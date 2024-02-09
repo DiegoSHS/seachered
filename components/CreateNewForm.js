@@ -17,6 +17,7 @@ export default function CreateNewForm() {
   const { memory: { newProduct, products, selected, validForm }, setStored } = StoredContext()
   const [errors, setErrors] = useState({})
   const [loading, setLoading] = useState(false)
+  const handler = async (s = selected, n = newProduct) => s ? updateRecord('products', n, s) : createNew('products', n)
   const handleChange = ({ target }) => {
     setStored({
       newProduct: { ...newProduct, [target.name]: target.name == 'price' ? Number(target.value) : target.value },
@@ -24,7 +25,10 @@ export default function CreateNewForm() {
     })
     setErrors(validateProduct(newProduct))
   }
-  const handler = async (s = selected, n = newProduct) => s ? updateRecord('products', n, s) : createNew('products', n)
+  const handleCancel = (e) => {
+    e.preventDefault()
+    setStored({ newProduct: defaultProduct, creating: false })
+  }
   const handleSubmit = (e) => {
     e.preventDefault()
     setLoading((loading) => !loading)
@@ -50,10 +54,6 @@ export default function CreateNewForm() {
       duration: 3000
     })
     setStored({ selected: null })
-  }
-  const handleCancel = (e) => {
-    e.preventDefault()
-    setStored({ newProduct: defaultProduct, creating: false })
   }
   return (
     <form onSubmit={handleSubmit} onChange={handleChange} className="text-foreground w-full flex flex-col gap-2 items-center justify-center mt-5">

@@ -2,7 +2,6 @@
 import { createClient } from "@/utils/supabase/server"
 import { validateProductTypes } from "@/validations"
 import { SupabaseClient } from "@supabase/supabase-js"
-import { SupabaseAuthClient } from "@supabase/supabase-js/dist/module/lib/SupabaseAuthClient"
 import { cookies } from "next/headers"
 
 const cookieStore = cookies()
