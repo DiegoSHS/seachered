@@ -5,25 +5,23 @@ import { ProductCards } from '@/components/productCard'
 import { selectCategory, selectFiltered } from "@/supabase/transactions"
 import { Button, Input, Select } from "@/components/Input"
 import { opts } from "@/components/CreateNewForm"
+import { StoredContext } from "@/context"
 
 export default function Products() {
-    const [products, setProducts] = useState([])
+    const { memory: { products, handlers: { getProducts } }, setStored } = StoredContext()
     const [filter, setFilter] = useState('')
     const handleSearch = async (e) => {
         setFilter(e.target.value)
     }
     const handleCategory = async ({ target }) => {
         const { data } = await selectCategory('products', target.value)
-        setProducts(data)
+        setStored({ products: data })
     }
     const getFilterProducts = async () => {
         if (filter === '') return getProducts()
         const { data } = await selectFiltered('products', filter)
-        setProducts(data)
+        setStored({ products: data })
     }
-    useEffect(() => {
-        getProducts()
-    }, [])
     useEffect(() => {
         getFilterProducts()
     }, [filter])
@@ -35,7 +33,7 @@ export default function Products() {
                 <Button className='bg-inherit rounded-md px-4 py-2 text-foreground mb-2' onClick={getProducts}>Borrar filtros</Button>
                 <Select onChange={handleCategory} name='category' options={opts}></Select>
             </div>
-            <ProductCards products={products} state={[setProducts]} />
+            <ProductCards products={products} />
         </div>
     )
 }

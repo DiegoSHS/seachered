@@ -2,9 +2,16 @@ import { Button } from "@/components/Input"
 import CreateNewForm from "@/components/CreateNewForm"
 import { StoredContext } from "@/context"
 import Empty from "@/components/Empty"
+import { deleteById } from "@/supabase/transactions"
 
 export const ProductCard = ({ product }) => {
-    const { memory: { handlers: { handleDelete } } } = StoredContext()
+    const { memory: { products }, setStored } = StoredContext()
+    const handleDelete = async (id) => {
+        setStored({ products: products.filter((product) => product.id !== id) })
+        await deleteById('products', id)
+    }
+    const goEdit = () => { setStored({ creating: true, editing: true, newProduct: product, selected: product.id, validForm: true }) }
+    const goDelete = () => handleDelete(product.id)
     return (
         <div className="p-1 text-foreground border border-t-foreground/10 rounded-md px-4 py-2 b-2">
             <div className="flex justify-between">
@@ -13,17 +20,18 @@ export const ProductCard = ({ product }) => {
             </div>
             <div className="text-green-500">{`$${product.price}`}</div>
             <div>{product.description}</div>
-            <div>
-                <Button onClick={() => handleDelete(product.id)}>Eliminar</Button>
+            <div className="flex gap-1">
+                <Button onClick={goDelete}>Eliminar</Button>
+                <Button onClick={goEdit}>Editar</Button>
             </div>
         </div>
     )
 }
 
 export const ProductCards = ({ products }) => {
-    const { memory: { products }, setStored } = StoredContext()
+    const { memory: { creating }, setStored } = StoredContext()
     return (
-        createActive ? (<CreateNewForm />) :
+        creating ? (<CreateNewForm />) :
             (<>
                 <div className="text-foreground w-full flex items-center justify-center mt-5">
                     <Button onClick={() => { setStored({ creating: true }) }}>Crear nuevo</Button>

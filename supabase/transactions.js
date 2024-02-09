@@ -20,7 +20,7 @@ export const deleteById = async (table, id, supabase = client) => {
     return supabase.from(table).delete({ count: 'estimated' }).eq('id', id)
 }
 /**
- * Retieves all records of the selected table
+ * Retrieves all records of the selected table
  * @param {SupabaseClient} supabase Supabase client
  * @param {String} table Name of the table
  */
@@ -33,7 +33,7 @@ export const selectById = async (table, id, supabase = client) => {
 }
 
 /**
- * Retrieves all recors of the selected table by category
+ * Retrieves all records of the selected table by category
  * @param {SupabaseClient} supabase Supabase client
  * @param {String} table Name of the table
  * @param {String} category Name of the category (use category column)
@@ -73,4 +73,12 @@ export const createNew = async (table, newObject, supabase = client) => {
         return valid
     }
     return supabase.from(table).insert(newObject).select()
+}
+
+export const updateRecord = async (table, newObject, id, supabase = client) => {
+    const valid = validateProductTypes(newObject)
+    if (valid.error) {
+        return valid
+    }
+    return supabase.from(table).update(newObject).eq('id', id).select()
 }

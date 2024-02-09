@@ -7,6 +7,7 @@ export const validateProduct = (product) => {
 }
 
 export const validateProductTypes = (product) => {
+    console.log(product)
     const errors = {}
     const noEmpty = Object.values(product).every(e => e !== '')
     if (!typeof product.name === 'string') errors.name = 'Tipo de dato invalido'
